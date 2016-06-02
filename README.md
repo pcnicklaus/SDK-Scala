@@ -1,4 +1,4 @@
-# SDK-NodeJs
+# SDK-Scala
 
 [logo]: https://github.com/RecastAI/SDK-NodeJs/blob/master/misc/logo-inline.png "Recast.AI"
 
@@ -8,7 +8,7 @@ Recast.AI official SDK in Scala.
 
 ## Synospis
 
-This module is a NodeJs interface to the [Recast.AI](https://recast.ai) API. It allows you to make request to your bots
+This module is a Scala interface to the [Recast.AI](https://recast.ai) API. It allows you to make request to your bots
 
 !! This is still a work in progress - DO NOT USE IT YET !!
 

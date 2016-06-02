@@ -3,11 +3,11 @@ import recast.entity.Entity
 
 package recast.sentence {
     class Sentence(json: JsValue) {
-      val source        = json \ "source"
-      val sentence_type = json \ "type"
-      val action        = json \ "action"
-      val agent         = json \ "agent"
-      val polarity      = json \ "polarity"
+      val source        = (json \ "source").as[String]
+      val sentence_type = (json \ "type").as[String]
+      val action        = (json \ "action").as[String]
+      val agent         = (json \ "agent").as[String]
+      val polarity      = (json \ "polarity").as[String]
       val entities      = (json \ "entities").as[Map[String, JsValue]].toList.map{
         case(name, data) => data.as[List[JsObject]].map(x => new Entity(name, x))
       }
