@@ -1,5 +1,6 @@
 import org.scalatest.FunSpec
 import play.api.libs.json._
+import scala.io.Source
 
 import recast.client._
 import recast.response._
@@ -24,6 +25,7 @@ class SetSpec extends FunSpec {
               "entities": {
                   "pronoun": [
                       {
+                          "value": 1.9, 
                           "person": 1,
                           "number": "singular",
                           "gender": "unkown",
@@ -51,8 +53,43 @@ class SetSpec extends FunSpec {
 
   describe("Client class") {
     it("should be instanciable") {
-      val client = new Client("YOUR_TOKEN")
+      val client = new Client("YOUR_TOKEN", "EN")
       assert(client.getClass.getName == "recast.client.Client")
+    }
+
+    describe("textRequest method") {
+      it("should fail if invalid language") {
+        val client = new Client("YOUR_TOKEN", "EN")
+
+        intercept[RecastError] {
+          client.textRequest("MY TEXT", Map("language" -> "INVALID_LANGUAGE"))
+        }
+      }
+
+      it("should succeed with token and language") {
+        val client = new Client(sys.env("RECAST_TOKEN"), "EN")
+        val response = client.textRequest("Test")
+
+        assert(response.status == 200)
+      }
+    }
+
+    describe("fileRequest method") {
+      it("should fail if invalid language") {
+        val client = new Client("YOUR_TOKEN", "EN")
+
+        intercept[RecastError] {
+          client.fileRequest("MY FILE", Map("language" -> "INVALID_LANGUAGE"))
+        }
+      }
+
+      it("should succeed with token and language") {
+        val client = new Client(sys.env("RECAST_TOKEN"), "FR")
+        val file = getClass.getResource("/test.wav")
+        val response = client.fileRequest(file.getPath())
+
+        assert(response.status == 200)
+      }
     }
   }
 
@@ -63,7 +100,7 @@ class SetSpec extends FunSpec {
       // Testing the getters
       assert(response.getClass.getName == "recast.response.Response")
       assert(response.source == "What can I cook with asparagus and potatoes ?")
-      assert(response.intents == Seq("recipe"))
+      assert(response.intents == Some(Seq("recipe")))
       assert(response.sentences.length == 1)
       assert(response.version == "0.1.4")
       assert(response.timestamp == "2016-06-02T09:37:56+02:00")
@@ -88,10 +125,10 @@ class SetSpec extends FunSpec {
 
       assert(sentence.getClass.getName == "recast.sentence.Sentence")
       assert(sentence.source == "What can I cook with asparagus and potatoes ?")
-      assert(sentence.sentence_type == "what")
-      assert(sentence.action == "can cook")
-      assert(sentence.agent == "i")
-      assert(sentence.polarity == "positive")
+      assert(sentence.sentence_type == Some("what"))
+      assert(sentence.action == Some("can cook"))
+      assert(sentence.agent == Some("i"))
+      assert(sentence.polarity == Some("positive"))
       assert(sentence.entities.length == 2)
     }
 
@@ -124,6 +161,7 @@ class SetSpec extends FunSpec {
       assert(entity.next() == None)
       assert(entity.grain() == None)
       assert(entity.order() == None)
+      assert(entity.value().get == "1.9")
     }
   }
 

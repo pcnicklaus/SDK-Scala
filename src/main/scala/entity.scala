@@ -19,6 +19,13 @@ package recast.entity {
     private val number_   = json \ "number"
     private val formated_ = json \ "formated"
 
+    def value(): Option[String] = {
+      this.value_.isInstanceOf[JsUndefined] match {
+        case true => None
+        case _ => Some(this.value_.toString)
+      }
+    }
+
     def raw():Option[String] = {
       this.raw_.isInstanceOf[JsUndefined] match {
         case true => None

@@ -5,14 +5,19 @@ import recast.entity.Entity
 
 package recast.response {
   class Response(json: JsValue) {
-    val intents    = (json \ "intents").as[List[String]]
+    val intents    = (json \ "intents").as[Option[List[String]]]
     val source     = (json \ "source").as[String]
     val status     = (json \ "status").as[Int]
     val version    = (json \ "version").as[String]
     val timestamp  = (json \ "timestamp").as[String]
     val sentences  = (json \ "sentences").as[List[JsObject]].map(x => new Sentence(x))
 
-    def intent(): Option[String] = this.intents.headOption
+    def intent(): Option[String] = {
+      this.intents match {
+        case None => None
+        case Some(intents) => intents.headOption
+      }
+    }
 
     def sentence(): Option[Sentence] = this.sentences.headOption
 
