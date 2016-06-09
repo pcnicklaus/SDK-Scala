@@ -54,6 +54,13 @@ class SetSpec extends FunSpec {
   describe("Client class") {
     it("should be instanciable") {
       val client = new Client("YOUR_TOKEN", "EN")
+
+      assert(client.getClass.getName == "recast.client.Client")
+    }
+
+    it("should be instanciable without language param") {
+      val client = new Client("YOUR_TOKEN")
+
       assert(client.getClass.getName == "recast.client.Client")
     }
 
@@ -75,14 +82,6 @@ class SetSpec extends FunSpec {
     }
 
     describe("fileRequest method") {
-      it("should fail if invalid language") {
-        val client = new Client("YOUR_TOKEN", "EN")
-
-        intercept[RecastError] {
-          client.fileRequest("MY FILE", Map("language" -> "INVALID_LANGUAGE"))
-        }
-      }
-
       it("should succeed with token and language") {
         val client = new Client(sys.env("RECAST_TOKEN"), "FR")
         val file = getClass.getResource("/test.wav")

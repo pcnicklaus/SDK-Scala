@@ -4,7 +4,7 @@ lazy val root = (project in file(".")).
   settings(bintrayPublishSettings).
   settings(
     name := "sdk_scala",
-    version := "0.7.0",
+    version := "0.7.1",
     description := "The official Recast.AI Scala SDK",
     organization := "ai.recast",
     publishMavenStyle := true,

@@ -6,21 +6,21 @@ import recast.response.Response
 import recast.error.RecastError
 
 package recast.client {
-  object ClientConstants {
-    val languages: Array[String] = Array("EN", "FR")
-  }
 
-  class Client(token: String, language: String) {
+  class Client(token: String, language: String = null) {
     def textRequest(text: String, options: Map[String, String] = Map("" -> "")): Response = {
       val token: String = if (options.contains("token")) options.get("token").get else this.token
       val language: String = if (options.contains("language")) options.get("language").get else this.language 
+      var params = Seq("text" -> text) 
+
+      if (language != null) {
+        params = params :+ ("language" -> language)
+      }
 
       if (token == None)
         throw new RecastError("Missing token")
-      else if (!ClientConstants.languages.contains(language))
-        throw new RecastError("Invalid language provided")
       val res = Http("https://api.recast.ai/v1/request")
-        .postForm(Seq("text" -> text, "language" -> language))
+        .postForm(params)
         .header("Authorization", "Token " + token)
         .asString
       if (!res.isSuccess)
@@ -31,17 +31,20 @@ package recast.client {
     def fileRequest(file: String, options: Map[String, String] = Map("" -> "")): Response = {
       val token: String = if (options.contains("token")) options.get("token").get else this.token
       val language: String = if (options.contains("language")) options.get("language").get else this.language 
+      var params = Seq("language" -> language)
 
       if (token == None)
         throw new RecastError("Missing token")
-      else if (!ClientConstants.languages.contains(language))
-        throw new RecastError("Invalid language provided")
-      val res = Http("https://api.recast.ai/v1/request")
+      val request = Http("https://api.recast.ai/v1/request")
         .postMulti(MultiPart("voice", file, "audio/wav", Files.readAllBytes(Paths.get(file))))
-        .param("language", language)
+        .params(params)
         .timeout(connTimeoutMs = 2000, readTimeoutMs = 10000)
         .header("Authorization", "Token " + token)
-        .asString
+
+      if (language != null)
+        request.params(Seq("language" -> language))
+
+      val res = request.asString;
       if (!res.isSuccess)
         throw new RecastError((Json.parse(res.body) \ "message").as[String])
       new Response(Json.parse(res.body) \ "results")

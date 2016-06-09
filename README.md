@@ -12,6 +12,46 @@ This module is a Scala interface to the [Recast.AI](https://recast.ai) API. It a
 
 !! This is still a work in progress - DO NOT USE IT YET !!
 
+## Installation
+
+### Via sbt
+
+Add those lines into your build.sbt file
+
+```scala
+resolvers += Resolver.bintrayRepo("recast-ai", "generic")
+
+libraryDependencies ++= Seq(
+    "ai.recast" %% "sdk_scala" % "0.7.0"
+  )
+```
+
+## Usage
+
+### Module
+
+```scala
+import recast.client._
+
+object HelloBot {
+  def main(args: Array[String]): Unit = {
+    val client = new Client("YOUR_TOKEN")
+
+    try {
+      val response = client.textRequest("Hello")
+      // Do your code
+      response.intent() match {
+        Some("hello-greetings") => println("Hello, world")
+        _ => println("I didn't understand, sorry !")
+      }
+    } catch {
+      // handle error
+      case _ => println("Something went wrong...")
+    }
+  }
+}
+```
+
 ## More
 
 You can view the whole API reference at [man.recast.ai](https://man.recast.ai).
