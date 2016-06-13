@@ -52,8 +52,14 @@ class SetSpec extends FunSpec {
     """)
 
   describe("Client class") {
-    it("should be instanciable") {
+    it("should be instanciable with all the params") {
       val client = new Client("YOUR_TOKEN", "EN")
+
+      assert(client.getClass.getName == "recast.client.Client")
+    }
+
+    it("should be instanciable without token") {
+      val client = new Client()
 
       assert(client.getClass.getName == "recast.client.Client")
     }
@@ -65,6 +71,14 @@ class SetSpec extends FunSpec {
     }
 
     describe("textRequest method") {
+      it("should fail if no token") {
+        val client = new Client
+
+        intercept[RecastError] {
+          client.textRequest("Some text")
+        }
+      }
+
       it("should fail if invalid language") {
         val client = new Client("YOUR_TOKEN", "EN")
 
@@ -82,6 +96,15 @@ class SetSpec extends FunSpec {
     }
 
     describe("fileRequest method") {
+      it("should fail if no token") {
+        val client = new Client
+        val file = getClass.getResource("/test.wav")
+
+        intercept[RecastError] {
+          client.fileRequest(file.getPath())
+        }
+      }
+
       it("should succeed with token and language") {
         val client = new Client(sys.env("RECAST_TOKEN"), "FR")
         val file = getClass.getResource("/test.wav")

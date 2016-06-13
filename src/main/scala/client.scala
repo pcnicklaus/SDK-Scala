@@ -7,7 +7,7 @@ import recast.error.RecastError
 
 package recast.client {
 
-  class Client(token: String, language: String = null) {
+  class Client(token: String = null, language: String = null) {
     def textRequest(text: String, options: Map[String, String] = Map("" -> "")): Response = {
       val token: String = if (options.contains("token")) options.get("token").get else this.token
       val language: String = if (options.contains("language")) options.get("language").get else this.language 
@@ -17,7 +17,7 @@ package recast.client {
         params = params :+ ("language" -> language)
       }
 
-      if (token == None)
+      if (token == null)
         throw new RecastError("Missing token")
       val res = Http("https://api.recast.ai/v1/request")
         .postForm(params)
@@ -33,7 +33,7 @@ package recast.client {
       val language: String = if (options.contains("language")) options.get("language").get else this.language 
       var params = Seq("language" -> language)
 
-      if (token == None)
+      if (token == null)
         throw new RecastError("Missing token")
       val request = Http("https://api.recast.ai/v1/request")
         .postMulti(MultiPart("voice", file, "audio/wav", Files.readAllBytes(Paths.get(file))))
