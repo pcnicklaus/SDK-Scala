@@ -78,8 +78,8 @@ If no language is provided in the request, Recast.AI does the following:
 * voiceRequest: your bot's primary language is used for processing as we do not provide language detection for speech.
 
 If a language is provided, it must be one of the following:
-  - EN *for English*
-  - FR *for French*
+  - en *for English*
+  - fr *for French*
 
 *Accepted options are: token, language, to override the defaults provided at initialization*
 

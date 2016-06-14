@@ -8,6 +8,7 @@ package recast.response {
     val intents    = (json \ "intents").as[Option[List[String]]]
     val source     = (json \ "source").as[String]
     val status     = (json \ "status").as[Int]
+    val language   = (json \ "language").as[Option[String]]
     val version    = (json \ "version").as[String]
     val timestamp  = (json \ "timestamp").as[String]
     val sentences  = (json \ "sentences").as[List[JsObject]].map(x => new Sentence(x))

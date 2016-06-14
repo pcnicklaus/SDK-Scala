@@ -80,7 +80,7 @@ class SetSpec extends FunSpec {
       }
 
       it("should fail if invalid language") {
-        val client = new Client("YOUR_TOKEN", "EN")
+        val client = new Client("YOUR_TOKEN", "en")
 
         intercept[RecastError] {
           client.textRequest("MY TEXT", Map("language" -> "INVALID_LANGUAGE"))
@@ -88,10 +88,11 @@ class SetSpec extends FunSpec {
       }
 
       it("should succeed with token and language") {
-        val client = new Client(sys.env("RECAST_TOKEN"), "EN")
+        val client = new Client(sys.env("RECAST_TOKEN"), "en")
         val response = client.textRequest("Test")
 
         assert(response.status == 200)
+        assert(response.language.get == "en")
       }
     }
 
@@ -106,11 +107,12 @@ class SetSpec extends FunSpec {
       }
 
       it("should succeed with token and language") {
-        val client = new Client(sys.env("RECAST_TOKEN"), "FR")
+        val client = new Client(sys.env("RECAST_TOKEN"), "fr")
         val file = getClass.getResource("/test.wav")
         val response = client.fileRequest(file.getPath())
 
         assert(response.status == 200)
+        assert(response.language.get == "fr")
       }
     }
   }
