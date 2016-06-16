@@ -39,8 +39,8 @@ object HelloBot {
       val response = client.textRequest("Hello")
       // Do your code
       response.intent() match {
-        Some("hello-greetings") => println("Hello, world")
-        _ => println("I didn't understand, sorry !")
+        case Some("hello-greetings") => println("Hello, world")
+        case _ => println("I didn't understand, sorry !")
       }
     } catch {
       // handle error
