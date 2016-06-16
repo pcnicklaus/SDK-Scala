@@ -10,8 +10,6 @@ Recast.AI official SDK in Scala.
 
 This module is a Scala interface to the [Recast.AI](https://recast.ai) API. It allows you to make request to your bots
 
-!! This is still a work in progress - DO NOT USE IT YET !!
-
 ## Installation
 
 ### Via sbt
@@ -22,7 +20,7 @@ Add those lines into your build.sbt file
 resolvers += Resolver.bintrayRepo("recast-ai", "generic")
 
 libraryDependencies ++= Seq(
-    "ai.recast" %% "sdk_scala" % "0.7.0"
+    "ai.recast" %% "sdk_scala" % "1.0.0"
   )
 ```
 
@@ -77,9 +75,10 @@ If no language is provided in the request, Recast.AI does the following:
 * textRequest: the language of the text is detected and is used for processing if your bot has expression for it, else your bot's primary language is used for processing.
 * voiceRequest: your bot's primary language is used for processing as we do not provide language detection for speech.
 
-If a language is provided, it must be one of the following:
-  - en *for English*
-  - fr *for French*
+If a language is provided, Recast.AI does the following:
+
+* textRequest: the language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used.
+* voiceRequest: the language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used
 
 *Accepted options are: token, language, to override the defaults provided at initialization*
 
@@ -132,7 +131,7 @@ val intent = response.intent()
 val ingredient = response.get("ingredient")
 val sentence = response.sentence()
 
-intent.match {
+intent match {
   case Some("recipe") => // send a response
   case _ => // No intent matched
 }
