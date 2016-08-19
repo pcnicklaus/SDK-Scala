@@ -1,4 +1,4 @@
-# SDK-Scala
+# Recast.AI - SDK-Scala
 
 [logo]: https://github.com/RecastAI/SDK-NodeJs/blob/master/misc/logo-inline.png "Recast.AI"
 
