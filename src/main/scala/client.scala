@@ -18,13 +18,13 @@ package recast.client {
       }
 
       if (token == null)
-        throw new RecastError("Missing token")
+        throw RecastError("Missing token")
       val res = Http("https://api.recast.ai/v1/request")
         .postForm(params)
         .header("Authorization", "Token " + token)
         .asString
       if (!res.isSuccess)
-        throw new RecastError((Json.parse(res.body) \ "message").as[String])
+        throw RecastError((Json.parse(res.body) \ "message").as[String])
       new Response(Json.parse(res.body) \ "results")
     }
 
@@ -44,7 +44,7 @@ package recast.client {
       if (language != null)
         request.params(Seq("language" -> language))
 
-      val res = request.asString;
+      val res = request.asString
       if (!res.isSuccess)
         throw new RecastError((Json.parse(res.body) \ "message").as[String])
       new Response(Json.parse(res.body) \ "results")
