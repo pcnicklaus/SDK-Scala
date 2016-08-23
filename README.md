@@ -183,6 +183,10 @@ As it inherits from Error, it implements the default Error methods.
 
 You can view the whole API reference at [man.recast.ai](https://man.recast.ai).
 
+## Tests
+
+Tests use a environment variable named 'RECAST_TOKEN' where you ought to include your own token.
+
 ## Author
 
 Jérôme Houdan, jerome.houdan@recast.ai
