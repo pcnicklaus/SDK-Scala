@@ -1,17 +1,16 @@
-import scalaj.http._
-import play.api.libs.json._
+package recast
+
 import java.nio.file.{Files, Paths}
 
-import recast.response.Response
-import recast.error.RecastError
+import play.api.libs.json._
 
-package recast.client {
+import scalaj.http._
 
-  class Client(token: String = null, language: String = null) {
+class Client(token: String = null, language: String = null) {
     def textRequest(text: String, options: Map[String, String] = Map("" -> "")): Response = {
       val token: String = if (options.contains("token")) options.get("token").get else this.token
-      val language: String = if (options.contains("language")) options.get("language").get else this.language 
-      var params = Seq("text" -> text) 
+      val language: String = if (options.contains("language")) options.get("language").get else this.language
+      var params = Seq("text" -> text)
 
       if (language != null) {
         params = params :+ ("language" -> language)
@@ -30,7 +29,7 @@ package recast.client {
 
     def fileRequest(file: String, options: Map[String, String] = Map("" -> "")): Response = {
       val token: String = if (options.contains("token")) options.get("token").get else this.token
-      val language: String = if (options.contains("language")) options.get("language").get else this.language 
+      val language: String = if (options.contains("language")) options.get("language").get else this.language
       var params = Seq("language" -> language)
 
       if (token == null)
@@ -50,4 +49,3 @@ package recast.client {
       new Response(Json.parse(res.body) \ "results")
     }
   }
-}

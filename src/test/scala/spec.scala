@@ -1,12 +1,8 @@
 import org.scalatest.FunSpec
 import play.api.libs.json._
-import scala.io.Source
+import recast._
 
-import recast.client._
-import recast.response._
-import recast.sentence._
-import recast.entity._
-import recast.error._
+import scala.io.Source
 
 class SetSpec extends FunSpec {
   val json = Json.parse("""
@@ -55,19 +51,19 @@ class SetSpec extends FunSpec {
     it("should be instanciable with all the params") {
       val client = new Client("YOUR_TOKEN", "EN")
 
-      assert(client.getClass.getName == "recast.client.Client")
+      assert(client.getClass.getName == "recast.Client")
     }
 
     it("should be instanciable without token") {
       val client = new Client()
 
-      assert(client.getClass.getName == "recast.client.Client")
+      assert(client.getClass.getName == "recast.Client")
     }
 
     it("should be instanciable without language param") {
       val client = new Client("YOUR_TOKEN")
 
-      assert(client.getClass.getName == "recast.client.Client")
+      assert(client.getClass.getName == "recast.Client")
     }
 
     describe("textRequest method") {
@@ -122,7 +118,7 @@ class SetSpec extends FunSpec {
       val response = new Response(json)
 
       // Testing the getters
-      assert(response.getClass.getName == "recast.response.Response")
+      assert(response.getClass.getName == "recast.Response")
       assert(response.source == "What can I cook with asparagus and potatoes ?")
       assert(response.intents == Some(Seq("recipe")))
       assert(response.sentences.length == 1)
@@ -135,9 +131,9 @@ class SetSpec extends FunSpec {
 
       assert(response.intent() == Some("recipe"))
       assert(response.sentence() != None)
-      assert(response.sentence().get.getClass.getName == "recast.sentence.Sentence")
+      assert(response.sentence().get.getClass.getName == "recast.Sentence")
       assert(response.get("ingredient") != None)
-      assert(response.get("ingredient").get.getClass.getName == "recast.entity.Entity")
+      assert(response.get("ingredient").get.getClass.getName == "recast.Entity")
       assert(response.all("ingredient").length == 2)
     }
   }
@@ -147,7 +143,7 @@ class SetSpec extends FunSpec {
       val list = (json \ "sentences").as[List[JsObject]]
       val sentence = new Sentence(list(0))
 
-      assert(sentence.getClass.getName == "recast.sentence.Sentence")
+      assert(sentence.getClass.getName == "recast.Sentence")
       assert(sentence.source == "What can I cook with asparagus and potatoes ?")
       assert(sentence.sentence_type == Some("what"))
       assert(sentence.action == Some("can cook"))
@@ -161,7 +157,7 @@ class SetSpec extends FunSpec {
       val sentence = new Sentence(list(0))
 
       assert(sentence.get("ingredient") != None)
-      assert(sentence.get("ingredient").get.getClass.getName == "recast.entity.Entity")
+      assert(sentence.get("ingredient").get.getClass.getName == "recast.Entity")
       assert(sentence.all("ingredient").length == 2)
     }
   }
