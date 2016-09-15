@@ -17,7 +17,7 @@ class Entity(key: String, json: JsValue) {
   val gender = extractStringOption(json \ "gender")
   val person = extractIntOption(json \ "person")
   val number = extractStringOption(json \ "number")
-  val formatted = extractStringOption(json \ "formated")
+  val formatted = extractStringOption(json \ "formatted")
   val value = json \ "value" match {
     case undefined: JsUndefined => None
     case p => Some(p.toString) // Special case
